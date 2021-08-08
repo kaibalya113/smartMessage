@@ -39,7 +39,7 @@ public class User {
 	private String aboutMe;
 	private String imageUrl;
 	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	//@JoinColumn(name = "c_id", columnDefinition = "cId")
 	private List<Contact> contact;
 }

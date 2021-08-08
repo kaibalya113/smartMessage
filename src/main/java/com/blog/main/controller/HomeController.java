@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -23,11 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.blog.main.dao.UserDao;
 import com.blog.main.model.Contact;
 import com.blog.main.model.User;
+import com.blog.main.utils.PasswordDecryption;
 import com.blog.main.utils.Response;
 
 import lombok.extern.slf4j.Slf4j;
 //import org.json.JSONObject;
 import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @Controller
@@ -37,71 +41,57 @@ public class HomeController {
 	@Autowired
 	private UserDao dao;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	@GetMapping({"/"})
 	public String index(Model model) {
+		return "landingpage";
+	}
+	
+	@GetMapping({"/postregister"})
+	public String postRegister(Model model) {
 		model.addAttribute("pageName", "Smart-Contact");
 		model.addAttribute("user", new User());
+		model.addAttribute("isLogin", false);
+		return "home";
+	}
+	
+	@GetMapping("/login")
+	public String login(Model model) {
+		model.addAttribute("pageName", "Smart-Contact");
+		model.addAttribute("isLogin", true);
 		return "home";
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<?> register( @RequestBody User user, Errors errors) {
+	public ResponseEntity<?> register( @RequestBody User user, HttpServletRequest req) {
 		
 		Response res = new Response();
-		if(errors.hasErrors()) {
-			log.info("aaaaaaaaaaa");
-			res.setMsg(errors.getAllErrors().stream().map(x-> x.getDefaultMessage()).collect(Collectors.joining(",")));
-			return ResponseEntity.badRequest().body(res);
-		}
 		
 		log.info("zzzzzzzzzz :: "+user.toString());
 		if(user.getName().equals("") || user.getPassword().equals("") || user.getEmailId().equals("")) {
-			
-			log.info("aaaaaaaaaaa");
-			
 			res.setMsg("Insert data");
 			return ResponseEntity.badRequest().body(res);
 		}
-		user.setRole("USER");
+		user.setRole("ROLE_USER");
+		user.setEnabled(true);
 		
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		
+		log.info(user.getPassword());
+		
+		try {
+			dao.save(user);
+		}catch (Exception e) {
+			log.info(e.getMessage().toString());
+			res.setMsg(e.getMessage());
+			return ResponseEntity.badRequest().body(res);
+		}
 		log.info(user.toString());
-		res.setMsg("Successful");
-		//return ResponseEntity.accepted().body(res);
-		//redirect to dashboard
-		return null;
-	}
-	
-	@PostMapping("/save")
-	public ResponseEntity<String> saveUser(@RequestBody User user) {
+		res.setMsg("Successful, Please Login with your Email and Password");
 		
-		try {
-			dao.save(user);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed");
-		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("working");
 		
-	}
-	@GetMapping("/savea")
-	public ResponseEntity<String> saveaUser() {
-		
-		try {
-			User user = new User();
-			user.setEmailId("mp@gmail.com");
-			user.setName("krishna");
-			
-			List<Contact> listOfContact = new ArrayList<>();
-			Contact contact = new Contact();
-			contact.setName("seela");
-			contact.setEmailId("kai@gmail.com");
-			listOfContact.add(contact);
-			user.setContact(listOfContact);
-			dao.save(user);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.toString());
-		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("working");
-		
+		return ResponseEntity.accepted().body(res);
 	}
 }
