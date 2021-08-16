@@ -1,3 +1,4 @@
+<%@page import="org.springframework.data.domain.Page"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.blog.main.model.Contact"%>
 <%@page import="java.util.List"%>
@@ -53,80 +54,108 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 					<div class="row">
 
 						<div class="col-md-12">
-							<center><h2>Recently Added</h2></center>
+							<center>
+								<h2>Recently Added</h2>
+							</center>
 							<div class="row">
-							<%List<Contact> recentContacts = (List)request.getAttribute("recentContacts");
-								for(int i =0; i<recentContacts.size(); i++){
+								<%
+								List<Contact> recentContacts = (List) request.getAttribute("recentContacts");
+								for (int i = 0; i < recentContacts.size(); i++) {
 									Contact contact = recentContacts.get(i);
-							%>
-							<div class="card" style="width: 12rem; border-radius: 2.25rem !important;">
-							  <div class="card-body">
-							    <h5 class="card-title"><%=contact.getName() %></h5>
-							    <h6 class="card-subtitle mb-2 text-muted"><%=contact.getPhoneNumber() %></h6>
-							    <p class="card-text"><%=contact.getDescription() %></p>
-							    <a href="#" class="card-link">Delete</a>
-							   
-							  </div>
-							</div>
-							<%} %>
-							<div>
-						</div>
-
-					</div>
-					</br>
-					<div class="row">
-
-						<div class="col-md-12">
-							<table class="table">
-								<thead>
-									<tr>
-										<th scope="col">Sl. No</th>
-										<th scope="col">Name</th>
-										<th scope="col">NickName</th>
-										<th scope="col">Email Id</th>
-										<th scope="col">Phone</th>
-									</tr>
-								</thead>
-								<%
-								List<Contact> list = (List) request.getAttribute("contacts");
-								System.out.println(list.size());
-								int count =1;
-								for (int i = 0; i < list.size(); i++) {
-									Contact contact = list.get(i);
-									System.out.println(contact.getName());
-									
 								%>
-								<tbody>
-									<tr>
-										<th scope="row"><%=count%></th>
-										<td><%=contact.getName()%></td>
-										<td><%=contact.getNickName()%></td>
-										<td><%=contact.getEmailId()%></td>
-										<td><%=contact.getPhoneNumber()%></td>
-									</tr>
-								</tbody>
-								
+								<div class="card"
+									style="width: 12rem; border-radius: 2.25rem !important;">
+									<div class="card-body">
+										<h5 class="card-title"><%=contact.getName()%></h5>
+										<h6 class="card-subtitle mb-2 text-muted"><%=contact.getPhoneNumber()%></h6>
+										<p class="card-text"><%=contact.getDescription()%></p>
+										<a href="#" class="card-link">Delete</a>
+
+									</div>
+								</div>
 								<%
-								count+=1;
 								}
 								%>
-							</table>
+								<div></div>
+
+							</div>
+							</br>
+							<div class="row">
+
+								<div class="col-md-12">
+									<table class="table">
+										<thead>
+											<tr>
+												<th scope="col">Sl. No</th>
+												<th scope="col">Name</th>
+												<th scope="col">NickName</th>
+												<th scope="col">Email Id</th>
+												<th scope="col">Phone</th>
+												<th scope="col">Action</th>
+											</tr>
+										</thead>
+										<%
+										Page<Contact> list = (Page) request.getAttribute("contacts");
+										System.out.println(list.getSize());
+										int count = 1;
+										for (int i = 0; i < list.getContent().size(); i++) {
+											Contact contact = list.getContent().get(i);
+											System.out.println(contact.getName());
+										%>
+										<tbody>
+											<tr><%-- onclick="clickdata('<%=contact%>')" --%>
+												<th scope="row"><%=count%></th>
+												<td  data-toggle="modal" data-target="#myModal"><%=contact.getName()%></td>
+												<td ><%=contact.getNickName()%></td>
+												<td><%=contact.getEmailId()%></td>
+												<td><%=contact.getPhoneNumber()%></td>
+												<td><button type="submit"><a href="/user/show/<%=contact.getcId()%>">View</a></button></td>
+											</tr>
+										</tbody>
+
+										<%
+										count += 1;
+										System.out.println(i);
+										}
+										%>
+									</table>
+									<nav aria-label="Page navigation example">
+										<ul class="pagination">
+										<%
+										int totalPage = (int)request.getAttribute("totalpages");
+										 int currentpage = (int)request.getAttribute("currentpage");
+										 int nextpage =currentpage;
+										if(currentpage != 0){ %>
+											<li class="page-item"><a class="page-link" href="/user/contact/<%=nextpage-1 %>">Previous</a></li>
+											<%} %>
+											
+											 <% 
+											for(int i=1;i<=totalPage;i++) {
+											if(currentpage == i-1){
+												nextpage = i+1;
+											%>
+											
+											<li class="page-item active"><a class="page-link" href="/user/contact/<%=i-1 %>"><%=i %></a></li>
+											<%}else{ %>
+											<li class="page-item"><a class="page-link" href="/user/contact/<%=i-1 %>"><%=i%></a></li>
+											<%}} %>
+											
+											<% int t = currentpage+1;
+											if(t != totalPage){ %>
+											<li class="page-item"><a class="page-link" href="/user/contact/<%=nextpage-1 %>">Next</a></li>
+											<%} %>
+										</ul>
+									</nav>
+								</div>
+
+							</div>
 						</div>
 
 					</div>
 				</div>
-
 			</div>
 		</div>
-	</div>
-	</div>
-	<script type="text/javascript">
-		function onContact() {
-			$.ajax({
-				type : "GET",
-				url : "user/contact"
-			})
-		}
-	</script>
+		 
+
 </body>
 </html>

@@ -25,6 +25,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 }
 
 </style>
+
 <style type="text/css" href="/css/card.css"></style>
 </head>
 <body>

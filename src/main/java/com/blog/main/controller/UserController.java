@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +20,11 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -65,29 +71,31 @@ public class UserController {
 		return "dashboard";
 	}
 	
-	@GetMapping("/contact")
-	public String contacts(Principal principal, Model model) throws ParseException {
+	@GetMapping("/contact/{page}")
+	public String contacts(@PathVariable("page") int page,Principal principal, Model model) throws ParseException {
 		String username = principal.getName();
 		User user = dao.findByEmailId(username);
 		// here will show recent contact and all contacts
 		
 		// will fetch from db top 5 recent contacts
 		Date date = new Date();
-		
+		PageRequest pageable = PageRequest.of(page, 3);
 		
 		List<Contact> recentContacts = contactDao.getContactsByTime(user.getuId(), format.format(date));
 		
 		
 		// here will show all contacts
 		
-		List<Contact> listContacts = null;
+		Page<Contact> listContacts = null;
 		if(user != null) {
-			listContacts = contactDao.findContactsByUser(user.getuId());
+			listContacts = contactDao.findContactsByUser(user.getuId(), pageable);
 			
 		}
-		
+		//String n = String.valueOf(false);
 		model.addAttribute("contacts", listContacts);
 		model.addAttribute("recentContacts", recentContacts);
+		model.addAttribute("currentpage", page);
+		model.addAttribute("totalpages", listContacts.getTotalPages());
 		log.info("ff");
 		return "contact";
 	}
@@ -152,6 +160,20 @@ public class UserController {
 		model.addAttribute("title", "Add Contact");
 		model.addAttribute("contact", new Contact());
 		return "addcontact";
+	}
+	
+	@GetMapping("/show/{id}")
+	public String showSingleContact(@PathVariable("id") int id, Model model){
+		Optional<Contact> contact =null;
+		log.info("id :: "+id);
+		
+		contact = contactDao.findById(id);
+		Contact con = null;
+		if(contact.isPresent()) {
+			con = contact.get();
+		}
+		model.addAttribute("contact", con);
+		return "showcontact";
 	}
 	
 	
