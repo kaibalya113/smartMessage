@@ -19,5 +19,7 @@ public interface ContactDao extends JpaRepository<Contact, Integer>{
 	
 	@Query("from Contact c where c.user.uId=?1 and c.time LIKE %?2% order by c.time desc")
 	public List<Contact> getContactsByTime(Integer uId, String time);
-	// pagination
+	
+	@Query("from Contact c where c.user.uId=:userId")
+	public List<Contact> findContactsByUserId(@Param("userId") Integer uId);
 }

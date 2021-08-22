@@ -103,7 +103,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 									<textarea rows="4" cols="30" name="description" id="description"></textarea>
 								</div>
 								
-								<input type="submit" class="btn btn-success btn-block" value="Add"
+								<input type="submit" class="btn btn-success btn-block" value="Update"
 									
 									style="width: 100%; border-radius: 0px; background: -webkit-linear-gradient(top, rgb(21, 97, 255) 0%, rgb(76, 98, 145) 100%);">
 									

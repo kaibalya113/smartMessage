@@ -24,20 +24,17 @@ public class CustomUserDetails implements UserDetails{
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole());
-		log.info("Roles :: "+ authority);
-		log.info("Roles :: "+ authority.getAuthority());
+		
 		return List.of(authority);
 	}
 
 	@Override
 	public String getPassword() {
-		log.info("DB :: "+ user.getPassword());
 		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		log.info("DB1 :: "+ user.getEmailId());
 		return user.getEmailId();
 	}
 

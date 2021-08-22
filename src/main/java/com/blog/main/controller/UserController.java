@@ -48,9 +48,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
-	private static final String EXTERNAL_FILE_PATH="/Users/krishna/Documents/PDF";
-	private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+	//private static final String EXTERNAL_FILE_PATH="/Users/krishna/Documents/PDF";
+	public static final String EXTERNAL_FILE_PATH ="/Users/krishna/Documents/workspace-spring-tool-suite-4-4.11.0.RELEASE/BLOG/src/main/webapp/images";
+	public SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 	@Autowired
 	private UserDao dao;
@@ -163,7 +164,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/show/{id}")
-	public String showSingleContact(@PathVariable("id") int id, Model model){
+	public String showSingleContact(@PathVariable("id") int id, Model model,Principal principal){
 		Optional<Contact> contact =null;
 		log.info("id :: "+id);
 		
@@ -172,9 +173,17 @@ public class UserController {
 		if(contact.isPresent()) {
 			con = contact.get();
 		}
-		model.addAttribute("contact", con);
+		User user = dao.findByEmailId(principal.getName());
+		if(user.getuId()== con.getUser().getuId()) {
+			model.addAttribute("contact", con);
+		}
+		// set image in contact for display
+		
+		
 		return "showcontact";
 	}
+	
+	
 	
 	
 }

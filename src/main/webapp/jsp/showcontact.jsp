@@ -72,9 +72,12 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 						<h4>Created By : <%=contact.getTime() %></h4>
 					</div>
 						<div class="col-md-4">
-						
+						<%if(contact.getImage()==null){ %>
 							 <img src="/images/pic.png" alt="Avatar" class="avatar"> 
+						<%}else{ %>
 						
+						 <img src="/images/<%=contact.getImage() %>" alt="Avatar" class="avatar"> 
+						<%} %>
 					</div>
 					
 					</div>
@@ -87,7 +90,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 						<div class="col-md-8">
 						<center>
 							<button type="submit">Delete</button>
-							<button type="submit">Update</button></center>
+							<button><a href="/contact/updatecontact/<%=contact.getcId()%>">update</a> </button></center>
 						</div>
 					</div>
 					

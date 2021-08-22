@@ -40,6 +40,7 @@ public class Contact {
 	private String time;
 	@ManyToOne
 	private User user;
+	private boolean isDeleted;
 	
 	public int getcId() {
 		return cId;
