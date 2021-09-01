@@ -6,6 +6,7 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -106,4 +107,33 @@ public class ContactController {
 		
 		return "dashboard";
 	}
+	
+	@GetMapping("/deletecontact/{cId}")
+	public String deleteContact(@PathVariable("cId") Integer cId) {
+		// get Contact by cId
+		Optional<Contact> con = contactDao.findById(cId);
+		Contact contact = null;
+		if(con.isPresent()) {
+			contact = con.get();
+		}
+		
+		// then update contact isDelete field to 1
+		try {
+			contactDao.deleteContact(contact.getcId());
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.info(cId.toString());
+		return "dashboard";
+		
+	}
+	
+	
+//	@GetMapping("/search/{search}")
+//	public List<Contact> getListOfContacts(@RequestParam String search){
+//		log.info("jflafjalfj "+ search);
+//		List<Contact> contacts = contactDao.getSearchContacts(search);
+//		log.info(contacts.toString());
+//		return contacts;
+//	}
 }

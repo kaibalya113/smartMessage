@@ -24,6 +24,37 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 	margin-left: 98px;
 	margin-top: 95px;
 }
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 12px;
+  background-repeat: no-repeat;
+  font-size: 16px;
+  width: 100%;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+#myUL {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myUL li a {
+  border: 1px solid #ddd;
+  margin-top: -1px; /* Prevent double borders */
+  background-color: #f6f6f6;
+  padding: 12px;
+  text-decoration: none;
+  font-size: 18px;
+  color: black;
+  display: block
+}
+
+#myUL li a:hover:not(.header) {
+  background-color: #eee;
+}
 </style>
 
 </head>
@@ -54,6 +85,12 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 					<div class="row">
 
 						<div class="col-md-12">
+						
+						
+						<div class="col-md-4">
+						<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+						<div id='container1'></div>
+						</div>
 							<center>
 								<h2>Recently Added</h2>
 							</center>
@@ -155,7 +192,45 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 				</div>
 			</div>
 		</div>
+		 <script type="text/javascript">
+		 function myFunction(){
+			// console.log($('#myInput').attr('id'));
+			var data = $('#myInput').val();
+			
+			
+			fetch("/search/"+data)
+				.then((response) => {
+					return response.json();
+				})
+				.then((data) => {
+					//console.log(data)
+					let text="";
+					var cont = document.getElementById('container1');
+					 var ul = document.createElement('ul');
+					 ul.setAttribute('style', 'padding: 0; margin: 0;');
+					    ul.setAttribute('id', 'theList');
+					data.forEach((contact) => {
+						 var li = document.createElement('li');     // create li element.
+					        li.innerHTML = contact.name;      // assigning text to li using array value.
+					        li.setAttribute('style', 'display: block;');    // remove the bullets.
+
+					        ul.appendChild(li);     // append li to ul.
+					})
+					 cont.appendChild(ul);       // add list to the container.
+					
+				})
+			/*  $.ajax({
+				 url:"/search/"+data,
+				 type: "GET",
+				 success : function(data){
+					 console.log(data.name)
+					 var obj = JSON.stringify(data);
+					console.log(obj['name'])
+				 }
+			 }) */
+		 }
 		 
+		 </script>
 
 </body>
 </html>

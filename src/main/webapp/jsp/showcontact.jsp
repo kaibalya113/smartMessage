@@ -32,6 +32,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 }
 </style>
 <style type="text/css" href="/css/card.css"></style>
+
 </head>
 <body>
 	<header>
@@ -89,7 +90,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 						
 						<div class="col-md-8">
 						<center>
-							<button type="submit">Delete</button>
+							<button> <a href="/contact/deletecontact/<%=contact.getcId()%>">Delete</a></button>
 							<button><a href="/contact/updatecontact/<%=contact.getcId()%>">update</a> </button></center>
 						</div>
 					</div>
@@ -99,17 +100,6 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 			</div>
 		</div>
 	</div>
-	<!-- <script type="text/javascript">
-		function onContact(){
-			alert("hi")
-			$.ajax({
-				type:"GET",
-				url:"user/contact",
-				success: function(data){
-					
-				}
-			})
-		}
-	</script> -->
+	
 </body>
 </html>
