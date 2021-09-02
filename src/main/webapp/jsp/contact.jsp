@@ -196,38 +196,35 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 		 function myFunction(){
 			// console.log($('#myInput').attr('id'));
 			var data = $('#myInput').val();
-			
-			
-			fetch("/search/"+data)
+			if(data == ''){
+				let text="<div class='list-group'>";
+				
+				text+="</div>";
+				
+				$('#container1').html(text);
+				$('#container1').show();
+			}else{
+				fetch("/search/"+data)
 				.then((response) => {
 					return response.json();
 				})
 				.then((data) => {
-					//console.log(data)
-					let text="";
-					var cont = document.getElementById('container1');
-					 var ul = document.createElement('ul');
-					 ul.setAttribute('style', 'padding: 0; margin: 0;');
-					    ul.setAttribute('id', 'theList');
-					data.forEach((contact) => {
-						 var li = document.createElement('li');     // create li element.
-					        li.innerHTML = contact.name;      // assigning text to li using array value.
-					        li.setAttribute('style', 'display: block;');    // remove the bullets.
-
-					        ul.appendChild(li);     // append li to ul.
-					})
-					 cont.appendChild(ul);       // add list to the container.
+					console.log(data)
+					let text="<div class='list-group'>";
 					
+					 
+					data.forEach((contact) => {
+						    text+="<a href='/user/show/"+contact.cId+"'>"+contact.name+"</a>"
+					})
+					 
+					text+="</div>";
+					//console.log(text)
+					$('#container1').html(text);
+					$('#container1').show();
 				})
-			/*  $.ajax({
-				 url:"/search/"+data,
-				 type: "GET",
-				 success : function(data){
-					 console.log(data.name)
-					 var obj = JSON.stringify(data);
-					console.log(obj['name'])
-				 }
-			 }) */
+			}
+			
+			
 		 }
 		 
 		 </script>
