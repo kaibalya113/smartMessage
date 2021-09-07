@@ -4,6 +4,6 @@
 						<a href="/user/contact/0" class="w3-bar-item w3-button">View Contacts</a>
 						<a href="/user/" class="w3-bar-item w3-button">Profile</a>
 						<a href="/user/addcontact" class="w3-bar-item w3-button">Add Contact</a>
-						 <a href="#" class="w3-bar-item w3-button">Settings</a> 
+						 <a href="/user/settings" class="w3-bar-item w3-button">Settings</a> 
 							<a href="/logout" class="w3-bar-item w3-button">Logout</a>
 					</div>
