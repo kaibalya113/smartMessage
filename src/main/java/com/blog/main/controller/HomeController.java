@@ -127,7 +127,7 @@ public class HomeController {
 			res.setMsg("Password is not changed...");
 			js.put("msg", "Password is not changed...");
 		}
-		return ResponseEntity.accepted().body(js);
+		return ResponseEntity.accepted().body(js);  
 		
 	}
 }
