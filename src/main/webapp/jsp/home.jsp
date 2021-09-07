@@ -183,7 +183,7 @@ String iv = "3ad5485e60a4fecde36fa49ff63817dc";
 
 
 										<div class="checkbox">
-											<label><a href="forgotPassword.jsp"
+											<label><a href="/forgotpassword"
 												style="font-weight: 700; text-decoration: none; color: #455e9c; font-size: 18px;">
 													Forgot Your Password ? </a> </label>
 										</div>

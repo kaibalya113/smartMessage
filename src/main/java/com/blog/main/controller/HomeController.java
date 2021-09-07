@@ -1,5 +1,6 @@
 package com.blog.main.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import com.blog.main.model.Contact;
 import com.blog.main.model.User;
 import com.blog.main.utils.PasswordDecryption;
 import com.blog.main.utils.Response;
+import com.blog.main.utils.Utils;
 
 import lombok.extern.slf4j.Slf4j;
 //import org.json.JSONObject;
@@ -47,6 +49,11 @@ public class HomeController {
 	@GetMapping({"/"})
 	public String index(Model model) {
 		return "landingpage";
+	}
+	
+	@GetMapping({"/forgotpassword"})
+	public String forgotPassword(Model model) {
+		return "forgotPassword";
 	}
 	
 	@GetMapping({"/postregister"})
@@ -93,5 +100,34 @@ public class HomeController {
 		
 		
 		return ResponseEntity.accepted().body(res);
+	}
+	
+	@PostMapping("/forgotpsw")
+	public ResponseEntity<?> forgotPassword(HttpServletRequest req, Model model) {
+		JSONObject js = new JSONObject();
+		Response res = new Response();
+		log.info("Entered Email :: "+ req.getParameter("emailId"));
+		String email = req.getParameter("emailId");
+		
+		
+		
+		User user = dao.findByEmailId(email);
+		boolean ischanged = false;
+		String newPassword = "";
+		if(user != null) {
+			newPassword = Utils.randomPasswordGenerator();
+			// this pass word will encrypt and save to the db
+			user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+			try {
+			dao.save(user);}catch(Exception e) {log.error(" "+e.getMessage());}
+			ischanged = true;
+			res.setMsg("password changed successfully : Password Is :: "+ newPassword);
+			js.put("msg", "password changed successfully : Password Is :: "+ newPassword);
+		}else {
+			res.setMsg("Password is not changed...");
+			js.put("msg", "Password is not changed...");
+		}
+		return ResponseEntity.accepted().body(js);
+		
 	}
 }
