@@ -188,6 +188,10 @@ public class UserController {
 	}
 	
 	
-	
+	@GetMapping("/settings")
+	public String settings() {
+		
+		return "setting";
+	}
 	
 }
