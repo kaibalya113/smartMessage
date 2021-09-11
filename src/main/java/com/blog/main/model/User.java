@@ -41,7 +41,9 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
 	//@JoinColumn(name = "c_id", columnDefinition = "cId")
 	private List<Contact> contact;
+	private boolean isOnline;
 
+	
 	public int getuId() {
 		return uId;
 	}
@@ -112,6 +114,14 @@ public class User {
 
 	public void setContact(List<Contact> contact) {
 		this.contact = contact;
+	}
+
+	public boolean isOnline() {
+		return isOnline;
+	}
+
+	public void setOnline(boolean isOnline) {
+		this.isOnline = isOnline;
 	}
 	
 	
