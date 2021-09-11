@@ -194,4 +194,15 @@ public class UserController {
 		return "setting";
 	}
 	
+	@GetMapping("/chatwindow")
+	public String chatWindow(Principal principal, Model model) {
+		User user = dao.findByEmailId(principal.getName());
+		model.addAttribute("user", user);
+		
+		
+		return "chatwindow";
+	}
+	
+	
+	
 }

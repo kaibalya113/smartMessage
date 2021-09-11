@@ -66,9 +66,9 @@
 						<div class="card" style="width: 18rem;">
 							
 							<div class="card-body">
-								<h5 class="card-title">Others</h5>
-								<p class="card-text">Commig SOON</p>
-								<a href="#" class="btn btn-primary">Go somewhere</a>
+								<h5 class="card-title">Chat</h5>
+								<p class="card-text">Talk with your CloseOnes</p>
+								<a href="/user/chatwindow" class="btn btn-primary">Enter </a>
 							</div>
 						</div>
 						
