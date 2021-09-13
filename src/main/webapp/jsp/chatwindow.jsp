@@ -8,7 +8,7 @@
 <%@include file="cdn.jsp"%>
 
 </head>
-<body>
+<body onload="fetchuser()">
 <header>
 		<div class="top-bar_sub_w3layouts container-fluid">
 			<div class="row">
@@ -51,5 +51,15 @@
 
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+		$.ajax({
+			type:"GET",
+			url:"/user/onlinecontact",
+			success: function(resp){
+				console.log(resp[0]);
+			}
+		})
+	</script>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,6 +50,11 @@ public class MyConfig extends WebSecurityConfigurerAdapter{
 		//auth.inMemoryAuthentication().passwordEncoder(passwordEncoder()).withUser("user").password(passwordEncoder().encode("123456")).roles("USER");
 	}
 	
+	@Bean
+	public LogoutSuccessHandler logoutSuccessHandler() {
+	    return new CustomLogoutSuccessHandler();
+	} 
+	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -59,6 +65,9 @@ public class MyConfig extends WebSecurityConfigurerAdapter{
 								.formLogin().loginPage("/login")
 								.loginProcessingUrl("/dologin")
 								.defaultSuccessUrl("/user/dashboard")
+								.and()
+								.logout()
+								.logoutSuccessHandler(logoutSuccessHandler())
 								.and()
 								.csrf().disable();
 	}
