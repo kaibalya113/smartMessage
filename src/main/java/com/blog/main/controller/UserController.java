@@ -70,7 +70,9 @@ public class UserController {
 	
 	@RequestMapping("/dashboard")
 	public String dashboard( Model model, Principal principal ) {
-		log.info("dashboard is calling...");
+		User user = dao.getUserByUsername(principal.getName());
+		user.setOnline(true);
+		dao.save(user);
 		return "dashboard";
 	}
 	
