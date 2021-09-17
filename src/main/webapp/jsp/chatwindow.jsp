@@ -33,9 +33,10 @@
 				<h1>Options</h1>
 				<div class="row">
 
-					<div class="col-md-12">
-					
-						<h1>List of online Contacts</h1>
+					<div class="col-md-12"> 
+						<div class="online" id="online">
+						
+						</div>
 						
 						
 					</div>
@@ -48,7 +49,6 @@
 					
 				</div>
 			</div>
-
 		</div>
 	</div>
 	
@@ -57,7 +57,19 @@
 			type:"GET",
 			url:"/user/onlinecontact",
 			success: function(resp){
-				console.log(resp[0]);
+				//console.log(resp)
+				 var listOfonline = JSON.stringify(resp);
+				console.log(listOfonline);
+				
+				var div = document.getElementById('online');
+				for(var i=0; i < resp.length; i++) {
+			       
+			        
+			        div.innerHTML += '<img src="/images/'+resp[i].imageUrl+'" alt="'+resp[i].name+'" style="width:100px;border-radius: 50%; box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);">';
+			        
+			        
+			    }
+				
 			}
 		})
 	</script>
