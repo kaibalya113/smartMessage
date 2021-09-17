@@ -42,7 +42,9 @@ public class User {
 	//@JoinColumn(name = "c_id", columnDefinition = "cId")
 	private List<Contact> contact;
 	private boolean isOnline;
+	private String phoneNumber;
 
+	
 	
 	public int getuId() {
 		return uId;
@@ -122,6 +124,14 @@ public class User {
 
 	public void setOnline(boolean isOnline) {
 		this.isOnline = isOnline;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 	
 	
