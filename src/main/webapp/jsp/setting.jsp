@@ -54,7 +54,7 @@
 							<div class="card-body">
 								<h5 class="card-title">Upload Contacts</h5>
 								<p class="card-text">Upload large size contact file Like CSV</p>
-								<a href="#" class="btn btn-primary">Click Here</a>
+								<a href="/user/contactupload" class="btn btn-primary">Click Here</a>
 							</div>
 						</div>
 						

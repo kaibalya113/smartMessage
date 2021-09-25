@@ -94,9 +94,17 @@
 					<div class="col-sm-6">
 						<div class="card">
 							<div class="card-body">
-								<h5 class="card-title">Special title treatment</h5>
-								<p class="card-text">With supporting text below as a natural
-									lead-in to additional content.</p>
+								<h5 class="card-title">Update Mobile</h5>
+								<%if(user.getPhoneNumber() == null){ %>
+								<input type="number" id="phone" placeholder="Enter mobile No" >
+								
+								<input type="submit" value="update" onClick="updateMobile()">
+								<%}else{ %>
+								<input type="number" id="phone" placeholder="Enter mobile No" value="<%=user.getPhoneNumber()%>">
+								
+								<input type="submit" value="update" onClick="updateMobile()" disabled="disabled">
+								
+								<%} %>
 
 							</div>
 						</div>
@@ -128,13 +136,33 @@
 			processData: false,
 		    contentType: false,
 			success: function(resp){
-				console.log(resp);
+				alert(resp);
 			},
             error: function () {
                 alert("Error while processing request.Try Again.");
             }
 
 		});
+	}
+	
+	function updateMobile(){
+		var mobile = $("#phone").val();
+		var mob = /^[1-9]{1}[0-9]{9}$/;
+		console.log(mobile.length)
+		if(mobile.length <10){
+			console.log("should 10 digit.")
+		}else if(mob.test(mobile) == false){
+			console.log("Please enter valid mobile number.");
+		}else{
+			$.ajax({
+				type: "POST",
+				url:  "/update/mobile",
+				data: {mobile:mobile},
+				success:function(resp){
+					console.log(resp)
+				}
+			})
+		}
 	}
 
 </script>

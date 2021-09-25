@@ -52,6 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserController {
 	//private static final String EXTERNAL_FILE_PATH="/Users/krishna/Documents/PDF";
 	public static final String EXTERNAL_FILE_PATH ="/Users/krishna/Documents/workspace-spring-tool-suite-4-4.11.0.RELEASE/BLOG/src/main/webapp/images";
+	public static final String EXTERNAL_CSV_FILE_PATH ="/Users/krishna/Documents/workspace-spring-tool-suite-4-4.11.0.RELEASE/BLOG/src/main/webapp/files";
 	public SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -212,6 +213,15 @@ public class UserController {
 		
 		
 		return "profile";
+	}
+	
+	@GetMapping("/contactupload")
+	public String contactupload(Principal principal, Model model) {
+		User user = dao.findByEmailId(principal.getName());
+		model.addAttribute("user", user);
+		
+		
+		return "contactupload";
 	}
 	
 	
