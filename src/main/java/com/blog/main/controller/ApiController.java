@@ -3,14 +3,22 @@ package com.blog.main.controller;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
+import java.nio.file.Path;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.parsers.DocumentBuilder;
@@ -41,13 +49,18 @@ import org.xml.sax.SAXException;
 
 import com.blog.main.dao.ContactDao;
 import com.blog.main.dao.UserDao;
+import com.blog.main.model.Contact;
 import com.blog.main.model.User;
+import com.opencsv.CSVParser;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvException;
 
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j
 public class ApiController {
+	public SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	
 	@Autowired
@@ -134,14 +147,15 @@ public class ApiController {
 	}
 	
 	@PostMapping("/upload/csvfile")
-	public ResponseEntity<?> uploadCSV(HttpServletRequest req, Principal principal, MultipartFile file) throws IOException{
+	public ResponseEntity<?> uploadCSV(HttpServletRequest req, Principal principal, MultipartFile file) throws IOException, CsvException{
 		
 		User user = userDao.getUserByUsername(principal.getName());
-		
+		String fileName = null;
 		if(user != null) {
 			if(file!=null) {
-				String fileName = user.getPhoneNumber()+file.getOriginalFilename();
+				fileName = user.getPhoneNumber()+file.getOriginalFilename();
 				
+				try {
 				InputStream is = file.getInputStream();
 				byte b[] = new byte[is.available()];
 				is.read(b);
@@ -150,6 +164,43 @@ public class ApiController {
 				FileOutputStream fos = new FileOutputStream(UserController.EXTERNAL_CSV_FILE_PATH+ File.separator+fileName);
 				fos.write(b);
 				fos.close();
+				}catch (Exception e) {
+					log.error(e.getMessage());
+				}
+				
+				
+				// pick file 
+				String path = UserController.EXTERNAL_CSV_FILE_PATH+ File.separator+fileName;
+				
+				CSVReader reader = new CSVReader(new FileReader(path));
+				List<String[]> r = reader.readAll();
+				ArrayList<Contact> lcontact = new ArrayList<>();
+				r.forEach((data) ->{
+					if(!data[0].contains("description")){
+						
+						Contact contact = new Contact();
+						contact.setDescription(data[0]);
+						contact.setEmailId(data[1]);
+						contact.setImage(null);
+						contact.setName(data[2]);
+						contact.setPhoneNumber(data[3]);
+						contact.setWork(data[4]);
+						contact.setUser(user);
+						contact.setTime(formatter.format(new Date()));
+						lcontact.add(contact);
+					}
+				});
+				
+				
+				try {
+					contactDao.saveAll(lcontact);
+				}catch (Exception e) {
+					log.error(e.getMessage());
+				}
+				//lcontact.forEach(x -> log.info(x.getEmailId()));
+				log.info("Sucessfully inserted...");
+				
+				
 			}else{
 				return ResponseEntity.ok("CSV file is needed...");
 			}

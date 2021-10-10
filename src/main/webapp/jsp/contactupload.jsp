@@ -72,7 +72,8 @@
 				processData: false,
 			    contentType: false,
 				success:function(resp){
-					console.log(resp);
+					alert(resp);
+					window.location.reload()
 				}
 			})
 		}
