@@ -89,7 +89,7 @@ public class ApiController {
 				uo.setName(u.getName());
 				uo.setEmailId(u.getEmailId());
 				uo.setImageUrl(u.getImageUrl());
-				
+				uo.setPhoneNumber(u.getPhoneNumber());
 				userList.add(uo);
 				
 			}
